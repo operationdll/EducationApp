@@ -197,8 +197,12 @@ body {
 					    'transform': 'translateY(100%)'
 					});
 				});
+				var isOk = false;
 				//登录
-				$(".login_btn").click(function(){
+				$("form:eq(0)").submit(function(){
+					if(isOk){
+						return true;
+					}
 					var userName = $("#userName").val();
 					var password = $("#password").val();
 					if($.trim(userName)==""){
@@ -223,28 +227,34 @@ body {
 						});
 						return false;
 					}
-					if(userName!="admin"){
-						$(".confirm-bd").html("用户名错误");
-						$(".mask-black-dialog").css({
-						    '-webkit-transform': 'translate(0,0)',
-						    '-moz-transform': 'translate(0,0)',
-						    '-ms-transform': 'translate(0,0)',
-						    '-o-transform':'translate(0,0)',
-						    'transform': 'translate(0,0)'
-						});
-						return false;
-					}
-					if(password!="admin123"){
-						$(".confirm-bd").html("密码错误");
-						$(".mask-black-dialog").css({
-						    '-webkit-transform': 'translate(0,0)',
-						    '-moz-transform': 'translate(0,0)',
-						    '-ms-transform': 'translate(0,0)',
-						    '-o-transform':'translate(0,0)',
-						    'transform': 'translate(0,0)'
-						});
-						return false;
-					}
+					$.ajax({
+						type: "POST",
+						dataType: "json",
+						url: "<%=basePath%>school/login.do",
+						data: {'userName':userName,'password':password},
+						success: function(data){
+							$(".confirm-bd").html("登录出错");
+					        if(1==data.code){
+								$(".confirm-bd").html("用户名错误");
+							}
+							if(2==data.code){
+								$(".confirm-bd").html("密码错误");
+							}
+							if(data.code!=0){
+								$(".mask-black-dialog").css({
+								    '-webkit-transform': 'translate(0,0)',
+								    '-moz-transform': 'translate(0,0)',
+								    '-ms-transform': 'translate(0,0)',
+								    '-o-transform':'translate(0,0)',
+								    'transform': 'translate(0,0)'
+								});
+							}else{
+								isOk = true;
+								$("form:eq(0)").submit();
+							}
+						}
+					});
+					return false;
 				});
 			});
 		</script>
@@ -273,12 +283,12 @@ body {
 				<form action="<%=basePath%>school/init.do" method="post">
 					<div class="form-group mg-t20">
 						<i class="icon-user icon_font"></i>
-						<input type="text" class="login_input" id="userName"
+						<input type="text" class="login_input" id="userName" name="userName"
 							placeholder="请输入用户名" />
 					</div>
 					<div class="form-group mg-t20">
 						<i class="icon-lock icon_font"></i>
-						<input type="password" class="login_input" id="password"
+						<input type="password" class="login_input" id="password" name="password"
 							placeholder="请输入密码" />
 					</div>
 					<!--<div class="checkbox mg-b25">
@@ -288,7 +298,7 @@ body {
 						</label>
 					</div>
 					-->
-					<button class="login_btn">
+					<button class="login_btn" type="submit">
 						登 录
 					</button>
 				</form>

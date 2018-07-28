@@ -60,6 +60,28 @@ public class SchoolControl {
 		}
 	}
 
+	@RequestMapping(value = "/login.do", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public void login(HttpServletRequest req, HttpServletResponse response,
+			Model model, String userName, String password) {
+		response.setContentType("application/json");
+		PrintWriter out = null;
+		try {
+			String code = "{code:0}";
+			if (!"admin".equals(userName)) {
+				code = "{code:1}";
+			}else if (!"admin123".equals(password)) {
+				code = "{code:2}";
+			}
+			out = response.getWriter();
+			out.print(JSON.parse(code));
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			log.error("SchoolControl-->login报错:" + e);
+		}
+	}
+
 	/**
 	 * 初始化页面
 	 */

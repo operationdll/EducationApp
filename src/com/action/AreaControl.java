@@ -2,9 +2,7 @@ package com.action;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,13 +45,13 @@ public class AreaControl {
 	@RequestMapping(value = "/addArea.do", method = { RequestMethod.POST })
 	public void addArea(HttpServletRequest req, HttpServletResponse response,
 			String name) {
-		areaService.addArea(name);
 		response.setContentType("application/json");
 		PrintWriter out = null;
 		try {
+			areaService.addArea(URLDecoder.decode(name, "UTF-8"));
 			out = response.getWriter();
 			out.print(JSON.parse("{code:0}"));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error("AreaControl-->addArea报错:" + e.toString());
 		} finally {
 			if (out != null) {

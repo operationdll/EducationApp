@@ -6,4 +6,6 @@
 <tiles-definitions>
 	<definition name="schoolList"
 		template="/WEB-INF/jsp/schools/list.jsp" />
+
+	<definition name="loginPage" template="/index.jsp" />
 </tiles-definitions>
