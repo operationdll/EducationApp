@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="area">
+	<typeAlias alias="areaDto" type="com.dto.AreaDto" />
+	<select id="getList" resultClass="areaDto">
+		select id,name from areas
+	</select>
+	<insert id="addArea">
+	  INSERT INTO areas(name) VALUES(#name#)
+	</insert>
+</sqlMap>

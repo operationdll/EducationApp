@@ -1,0 +1,300 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>教育系统后台</title>
+		<meta name="viewport"
+			content="width=device-width,initial-scale=1.0,user-scalable=no">
+		<link rel="stylesheet"
+			href="<%=basePath%>login/css/bootstrap.css">
+		<link href="<%=basePath%>login/iconfont/style.css" type="text/css"
+			rel="stylesheet">
+		<script src="<%=basePath%>js/jquery-3.1.1.min.js"></script>
+		<style>
+body {
+	color: #fff;
+	font-family: "微软雅黑";
+	font-size: 14px;
+}
+
+.wrap1 {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: auto
+}  /*把整个屏幕真正撑开--而且能自己实现居中*/
+.main_content {
+	background: url("<%=basePath%>login/images/main_bg.png") repeat;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+	float: none;
+	border-radius: 8px;
+}
+
+.form-group {
+	position: relative;
+}
+
+.login_btn {
+	display: block;
+	background: #3872f6;
+	color: #fff;
+	font-size: 15px;
+	width: 100%;
+	line-height: 50px;
+	border-radius: 3px;
+	border: none;
+}
+
+.login_input {
+	width: 100%;
+	border: 1px solid #3872f6;
+	border-radius: 3px;
+	line-height: 40px;
+	padding: 2px 5px 2px 30px;
+	background: none;
+}
+
+.icon_font {
+	position: absolute;
+	bottom: 15px;
+	left: 10px;
+	font-size: 18px;
+	color: #3872f6;
+}
+
+.font16 {
+	font-size: 16px;
+}
+
+.mg-t20 {
+	margin-top: 20px;
+}
+
+@media ( min-width :200px) {
+	.pd-xs-20 {
+		padding: 20px;
+	}
+}
+
+@media ( min-width :768px) {
+	.pd-sm-50 {
+		padding: 50px;
+	}
+}
+
+#grad {
+	background: -webkit-linear-gradient(#4990c1, #52a3d2, #6186a3);
+	/* Safari 5.1 - 6.0 */
+	background: -o-linear-gradient(#4990c1, #52a3d2, #6186a3);
+	/* Opera 11.1 - 12.0 */
+	background: -moz-linear-gradient(#4990c1, #52a3d2, #6186a3);
+	/* Firefox 3.6 - 15 */
+	background: linear-gradient(#4990c1, #52a3d2, #6186a3); /* 标准的语法 */
+}
+
+.mask-black-dialog {
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    z-index: 1500;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-transform: translateY(100%);
+    -moz-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+    -o-transform:translateY(100%);
+    transform: translateY(100%);
+}
+
+.m-alert {
+    -webkit-animation: zoomIn .15s ease forwards;
+    animation: zoomIn .15s ease forwards;
+}
+
+.m-confirm {
+    width: 290px;
+    background-color: #FAFAFA;
+    border-radius: 2px;
+    font-size: 15px;
+    -webkit-animation: zoomIn .15s ease forwards;
+    animation: zoomIn .15s ease forwards;
+}
+
+.m-alert .confirm-bd {
+    text-align: center;
+    padding: 20px 20px 0 20px;
+}
+
+.confirm-bd {
+    text-align: left;
+    padding: 0 20px;
+    font-size: 14px;
+    color: #888;
+    line-height: 20px;
+    word-break: break-all;
+}
+
+.m-alert .confirm-ft {
+    margin-top: 14px;
+}
+
+.confirm-ft {
+    position: relative;
+    line-height: 40px;
+    margin-top: 14px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.confirm-ft > a.confirm-btn.primary {
+    color: #0BB20C;
+}
+
+.confirm-ft > a {
+    position: relative;
+    text-align: center;
+    display: block;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    padding: 0 2px;
+}
+</style>
+		<script>
+			$(function () {
+				$(".confirm-btn").click(function(){
+					$(".mask-black-dialog").css({
+					    '-webkit-transform': 'translateY(100%)',
+					    '-moz-transform': 'translateY(100%)',
+					    '-ms-transform': 'translateY(100%)',
+					    '-o-transform':'translateY(100%)',
+					    'transform': 'translateY(100%)'
+					});
+				});
+				//登录
+				$(".login_btn").click(function(){
+					var userName = $("#userName").val();
+					var password = $("#password").val();
+					if($.trim(userName)==""){
+						$(".confirm-bd").html("请输入用户名");
+						$(".mask-black-dialog").css({
+						    '-webkit-transform': 'translate(0,0)',
+						    '-moz-transform': 'translate(0,0)',
+						    '-ms-transform': 'translate(0,0)',
+						    '-o-transform':'translate(0,0)',
+						    'transform': 'translate(0,0)'
+						});
+						return false;
+					}
+					if($.trim(password)==""){
+						$(".confirm-bd").html("请输入密码");
+						$(".mask-black-dialog").css({
+						    '-webkit-transform': 'translate(0,0)',
+						    '-moz-transform': 'translate(0,0)',
+						    '-ms-transform': 'translate(0,0)',
+						    '-o-transform':'translate(0,0)',
+						    'transform': 'translate(0,0)'
+						});
+						return false;
+					}
+					if(userName!="admin"){
+						$(".confirm-bd").html("用户名错误");
+						$(".mask-black-dialog").css({
+						    '-webkit-transform': 'translate(0,0)',
+						    '-moz-transform': 'translate(0,0)',
+						    '-ms-transform': 'translate(0,0)',
+						    '-o-transform':'translate(0,0)',
+						    'transform': 'translate(0,0)'
+						});
+						return false;
+					}
+					if(password!="admin123"){
+						$(".confirm-bd").html("密码错误");
+						$(".mask-black-dialog").css({
+						    '-webkit-transform': 'translate(0,0)',
+						    '-moz-transform': 'translate(0,0)',
+						    '-ms-transform': 'translate(0,0)',
+						    '-o-transform':'translate(0,0)',
+						    'transform': 'translate(0,0)'
+						});
+						return false;
+					}
+				});
+			});
+		</script>
+	</head>
+
+	<body
+		style="background: url(<%=basePath%>login/images/bg.jpg) no-repeat;">
+		<div class="mask-black-dialog">
+			<div class="m-confirm m-alert">
+				<div class="confirm-bd">
+				</div>
+				<div class="confirm-ft">
+					<a href="#" class="confirm-btn primary">确定</a>
+				</div>
+			</div>
+		</div>
+		<div class="container wrap1" style="height: 450px;">
+			<h2 class="mg-b20 text-center">
+				教育系统后台登录页面
+			</h2>
+			<div
+				class="col-sm-8 col-md-5 center-auto pd-sm-50 pd-xs-20 main_content">
+				<p class="text-center font16">
+					用户登录
+				</p>
+				<form action="<%=basePath%>school/init.do" method="post">
+					<div class="form-group mg-t20">
+						<i class="icon-user icon_font"></i>
+						<input type="text" class="login_input" id="userName"
+							placeholder="请输入用户名" />
+					</div>
+					<div class="form-group mg-t20">
+						<i class="icon-lock icon_font"></i>
+						<input type="password" class="login_input" id="password"
+							placeholder="请输入密码" />
+					</div>
+					<!--<div class="checkbox mg-b25">
+						<label>
+							<input type="checkbox" />
+							记住我的登录信息
+						</label>
+					</div>
+					-->
+					<button class="login_btn">
+						登 录
+					</button>
+				</form>
+			</div>
+			<!--row end-->
+		</div>
+		<!--container end-->
+	</body>
+</html>
