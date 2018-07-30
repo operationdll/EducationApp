@@ -63,6 +63,15 @@ public class HelloWorld {
 	public String init() {
 		return "list";
 	}
+	
+	/**
+	 * 跳转到区域页面
+	 */
+	@RequestMapping(value = "/areaPage.do", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public String areaPage() {
+		return "area";
+	}
 
 	/**
 	 * 获取区域信息
