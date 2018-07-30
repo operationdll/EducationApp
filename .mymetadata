@@ -2,12 +2,12 @@
 <project-module
   type="WEB"
   name="EducationApp"
-  id="myeclipse.1393926259089"
+  id="myeclipse.1532902034795"
   context-root="/EducationApp"
   j2ee-spec="5.0"
   archive="EducationApp.war">
   <attributes>
-    <attribute name="webrootdir" value="/WebRoot" />
+    <attribute name="webrootdir" value="WebRoot" />
   </attributes>
 </project-module>
 

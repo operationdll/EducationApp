@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
-<sqlMap namespace="school">
-	<typeAlias alias="schoolsDto" type="com.dto.SchoolDto" />
-	<select id="init"
-		resultClass="schoolsDto">
-		select id,name from schools
-	</select>
-</sqlMap>
