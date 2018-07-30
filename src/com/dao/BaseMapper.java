@@ -14,4 +14,8 @@ public interface BaseMapper {
 	List<AreaDto> selectAreas();
 
 	int insertArea(String name);
+
+	int deleteArea(int id);
+
+	int updateArea(AreaDto areaDto);
 }

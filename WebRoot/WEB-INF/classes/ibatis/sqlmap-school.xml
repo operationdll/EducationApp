@@ -2,10 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dao.BaseMapper">
 	<resultMap id="BaseResultMap" type="com.dto.AreaDto"></resultMap>
+
 	<select id="selectAreas" resultMap="BaseResultMap">
 		select id,name from areas
 	</select>
+
 	<insert id="insertArea" parameterType="java.lang.String">
 		INSERT INTO areas(name) VALUES(#{name,jdbcType=VARCHAR})
 	</insert>
+
+	<delete id="deleteArea" parameterType="int">
+		delete from areas where id = #{id}
+	</delete>
+
+	<update id="updateArea" parameterType="com.dto.AreaDto">
+		update areas set name = #{name} where id = #{id}
+	</update>
 </mapper>

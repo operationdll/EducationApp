@@ -163,8 +163,8 @@
 															{{ area.name }}
 														</td>
 														<td>
-															<a class="btn btn-primary">修改</a>
-															<a class="btn btn-danger">删除</a>
+															<a class="btn btn-primary" ng-click="showUpdArea(area.id,area.name)">修改</a>
+															<a class="btn btn-danger" ng-click="delArea(area.id)">删除</a>
 														</td>
 													</tr>
 												</tbody>
@@ -176,7 +176,7 @@
 							</div>
 						</div>
 						<!-- area add -->
-						<div class="content" ng-show="areaAddShow">
+						<div class="content" ng-show="areaAddShow" id="infoDiv">
 							<div class="module">
 								<div class="module-head">
 									<h3>
@@ -195,6 +195,7 @@
 											<div class="controls">
 												<input type="text" ng-model="areaName" placeholder="请填写区域名称"
 													class="span8 tip">
+												<input type="hidden" ng-model="areaId">
 											</div>
 										</div>
 										<div class="control-group">
@@ -243,6 +244,20 @@
 		<script src="<%=basePath%>js/angular1.4.8.min.js"
 			type="text/javascript"></script>
 		<script type="text/javascript">
+			//初始化区域信息
+			function initAreaData($http,$scope){
+			    $http({
+			        method : "GET",
+			        url : "<%=basePath%>school/getAreaList.do"
+			    }).then(function mySucces(response) {
+			    	$scope.loadingShow = false;
+			        $scope.areas = response.data.datas;
+			    }, function myError(response) {
+			    	$scope.loadingShow = false;
+			        alert("getAreaList.do访问错误出错!");
+			        console.log(response.statusText);
+			    });
+			}
 			var app = angular.module('myApp', []);
 			app.controller('myCtrl', function($scope,$http) {
 				$scope.bgShow = true;
@@ -257,15 +272,7 @@
 			    //街道信息
 			    $scope.streetShow = false;
 			    //初始化区域信息
-			    $http({
-			        method : "GET",
-			        url : "<%=basePath%>school/getAreaList.do"
-			    }).then(function mySucces(response) {
-			        $scope.areas = response.data.datas;
-			    }, function myError(response) {
-			        alert("area/getAreaList.do访问错误出错!");
-			        console.log(response.statusText);
-			    });
+			    initAreaData($http,$scope);
 			    $scope.magArea = function() {
 			        $scope.areaShow = true;
 				    $scope.schoolShow = false;
@@ -291,6 +298,7 @@
 			    $scope.addArea = function() {
 			        $scope.areaAddShow = true;
 				    $scope.areaShow = false;
+				    $scope.areaId="";
 			    };
 			    //添加区域提交
 			    $scope.addAreaSub = function() {
@@ -301,40 +309,91 @@
 			        	$scope.loadingShow = true;
 			        	var areaName = $scope.areaName;
 			        	areaName = encodeURI(areaName);
-			        	//增加区域信息
-					    $http({
+			         	if($scope.areaId==""){
+			         		//增加区域信息
+						    $http({
+						        method : "POST",
+						        url : "<%=basePath%>school/addArea.do",
+						        params: {
+									name:areaName
+								}
+						    }).then(function mySucces(response) {
+						        if(response.data.code==0){
+						            $scope.areaName = '';
+						            //初始化区域信息
+				    				initAreaData($http,$scope);
+								    $scope.areaAddShow = false;
+					    			$scope.areaShow = true;
+						        	alert('添加成功!');
+						        }else{
+						        	$scope.loadingShow = false;
+						        	alert('添加失败!');
+						        }
+						    }, function myError(response) {
+						        alert("addAreaSub.do访问错误出错!");
+						        console.log(response.statusText);
+						    });
+			         	}else{
+			         		var id = $scope.areaId;
+			         		//修改区域信息
+						    $http({
+						        method : "POST",
+						        url : "<%=basePath%>school/updArea.do",
+						        params: {
+									name:areaName,
+									id:id
+								}
+						    }).then(function mySucces(response) {
+						        if(response.data.code==0){
+						            $scope.areaName = '';
+						            //初始化区域信息
+				    				initAreaData($http,$scope);
+								    $scope.areaAddShow = false;
+					    			$scope.areaShow = true;
+						        	alert('修改成功!');
+						        }else{
+						        	$scope.loadingShow = false;
+						        	alert('修改失败!');
+						        }
+						    }, function myError(response) {
+						        alert("updArea.do访问错误出错!");
+						        console.log(response.statusText);
+						    });
+			         	}
+			        }
+			    };
+			    //删除区域信息
+			    $scope.delArea = function(id) {
+			    	if (window.confirm("是否删除选中项?")) {
+			    		$scope.loadingShow = true;
+						$http({
 					        method : "POST",
-					        url : "<%=basePath%>school/addArea.do",
-					        //headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+					        url : "<%=basePath%>school/delArea.do",
 					        params: {
-								name:areaName
+								id:id
 							}
 					    }).then(function mySucces(response) {
 					        if(response.data.code==0){
 					            $scope.areaName = '';
-					            $http({
-							        method : "GET",
-							        url : "<%=basePath%>school/getAreaList.do"
-							    }).then(function mySucces(response) {
-							    	$scope.loadingShow = false;
-							        $scope.areas = response.data.datas;
-							    }, function myError(response) {
-							    	$scope.loadingShow = false;
-							        alert("area/getAreaList.do访问错误出错!");
-							        console.log(response.statusText);
-							    });
-							    $scope.areaAddShow = false;
-				    			$scope.areaShow = true;
-					        	alert('添加成功!');
+					            //初始化区域信息
+				    			initAreaData($http,$scope);
+					        	alert('删除成功!');
 					        }else{
 					        	$scope.loadingShow = false;
-					        	alert('添加失败!');
+					        	alert('删除失败!');
 					        }
 					    }, function myError(response) {
-					        alert("getAreaList.do访问错误出错!");
+					        alert("delArea.do访问错误出错!");
 					        console.log(response.statusText);
 					    });
-			        }
+					}
+			    };
+			    //显示修改区域信息
+			    $scope.showUpdArea = function(id,name) {
+			    	$scope.areaAddShow = true;
+				    $scope.areaShow = false;
+				    $scope.areaId = id;
+				    $scope.areaName = name;
 			    };
 			});
 		</script>

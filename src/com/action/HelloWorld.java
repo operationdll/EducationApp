@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.alibaba.fastjson.JSON;
 import com.dao.BaseMapper;
+import com.dto.AreaDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
@@ -109,6 +111,69 @@ public class HelloWorld {
 			}
 		} catch (Exception e) {
 			log.error("addArea报错:" + e.toString());
+		} finally {
+			if (out != null) {
+				out.flush();
+				out.close();
+			}
+		}
+	}
+
+	/**
+	 * 删除区域信息
+	 * 
+	 * @param req
+	 * @param response
+	 * @param name
+	 */
+	@RequestMapping(value = "/delArea.do", method = { RequestMethod.POST })
+	public void delArea(HttpServletRequest req, HttpServletResponse response,
+			int id) {
+		response.setContentType("application/json");
+		PrintWriter out = null;
+		try {
+			int num = baseMapper.deleteArea(id);
+			out = response.getWriter();
+			if (num > 0) {
+				out.print(JSON.parse("{code:0}"));
+			} else {
+				out.print(JSON.parse("{code:1}"));
+			}
+		} catch (Exception e) {
+			log.error("delArea报错:" + e.toString());
+		} finally {
+			if (out != null) {
+				out.flush();
+				out.close();
+			}
+		}
+	}
+
+	/**
+	 * 修改区域信息
+	 * 
+	 * @param req
+	 * @param response
+	 * @param name
+	 */
+	@RequestMapping(value = "/updArea.do", method = { RequestMethod.POST })
+	public void updArea(HttpServletRequest req, HttpServletResponse response,
+			int id, String name) {
+		response.setContentType("application/json");
+		PrintWriter out = null;
+		try {
+			AreaDto areaDto = new AreaDto();
+			areaDto.setId(id);
+			areaDto.setName(URLDecoder.decode(name, "UTF-8"));
+			int num = baseMapper.updateArea(areaDto);
+			out = response.getWriter();
+			if (num > 0) {
+				out.print(JSON.parse("{code:0}"));
+			} else {
+				out.print(JSON.parse("{code:1}"));
+			}
+		} catch (Exception e) {
+			log.error("updArea报错:" + e.toString());
 		} finally {
 			if (out != null) {
 				out.flush();
