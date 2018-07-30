@@ -11,6 +11,8 @@ public class SchoolDto implements Serializable {
 
 	private int id;
 	private String name;
+	private int aid;
+	private String aName;
 
 	public int getId() {
 		return id;
@@ -26,6 +28,22 @@ public class SchoolDto implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getAid() {
+		return aid;
+	}
+
+	public void setAid(int aid) {
+		this.aid = aid;
+	}
+
+	public String getAName() {
+		return aName;
+	}
+
+	public void setAName(String name) {
+		aName = name;
 	}
 
 }

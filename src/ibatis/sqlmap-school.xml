@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dao.BaseMapper">
 	<resultMap id="BaseResultMap" type="com.dto.AreaDto"></resultMap>
-
+	<resultMap id="SchoolMap" type="com.dto.SchoolDto"></resultMap>
+	<!-- 区域信息 -->
 	<select id="selectAreas" resultMap="BaseResultMap">
 		select id,name from areas
 	</select>
@@ -18,4 +19,9 @@
 	<update id="updateArea" parameterType="com.dto.AreaDto">
 		update areas set name = #{name} where id = #{id}
 	</update>
+	<!-- 学校信息 -->
+	<select id="selectSchools" resultMap="SchoolMap">
+		select t2.id,t2.name,t1.id aid,t1.name aName from areas t1 right join schools t2
+		on t1.id = t2.aid
+	</select>
 </mapper>

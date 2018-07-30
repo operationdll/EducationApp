@@ -111,7 +111,7 @@
 			        $("#contentFrame").attr("src","<%=basePath%>school/areaPage.do");
 			    };
 			    $scope.magSchool = function() {
-			        
+			        $("#contentFrame").attr("src","<%=basePath%>myschool/init.do");
 			    };
 			    $scope.magStreet = function() {
 			        
