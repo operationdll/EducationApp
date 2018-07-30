@@ -80,10 +80,14 @@
 			transform: translate(-50%, -50%);
 			z-index: 1010;
 		}
+		
+		.dropdown-menu{
+			display:block;
+		}
 	</style>
 	</head>
 	<body ng-app="myApp" ng-controller="myCtrl">
-		<div class="content" ng-show="areaShow">
+		<div class="content" ng-show="listShow">
 			<div class="content">
 				<div class="module">
 					<div class="module-head">
@@ -95,7 +99,7 @@
 						<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper"
 							role="grid">
 							<div id="DataTables_Table_0_length" class="dataTables_length">
-								<a class="btn btn-success" ng-click="addArea()">添加</a>
+								<a class="btn btn-success" ng-click="addItem()">添加</a>
 							</div>
 							<table class="table table-striped table-bordered table-condensed">
 								<thead>
@@ -115,20 +119,20 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="area in areas">
+									<tr ng-repeat="item in items">
 										<td>
-											{{ area.id }}
+											{{ item.id }}
 										</td>
 										<td>
-											{{ area.name }}
+											{{ item.name }}
 										</td>
 										<td>
-											{{ area.aName }}
+											{{ item.aName }}
 										</td>
 										<td>
 											<a class="btn btn-primary"
-												ng-click="showUpdArea(area.id,area.name)">修改</a>
-											<a class="btn btn-danger" ng-click="delArea(area.id)">删除</a>
+												ng-click="showUpdItem(item.id,item.name,item.aid,item.aName)">修改</a>
+											<a class="btn btn-danger" ng-click="delItem(item.id)">删除</a>
 										</td>
 									</tr>
 								</tbody>
@@ -140,16 +144,16 @@
 			</div>
 		</div>
 		<!-- area add -->
-		<div class="content" ng-show="areaAddShow" id="infoDiv">
+		<div class="content" ng-show="addShow">
 			<div class="module">
 				<div class="module-head">
 					<h3>
-						添加区域
+						添加学校
 					</h3>
 				</div>
 				<div class="module-body">
-					<div class="alert alert-error" ng-show="areaError">
-						<strong>错误:</strong> 请填写区域名称
+					<div class="alert alert-error" ng-show="addError">
+						<strong>错误:</strong> 请填写学校名称
 					</div>
 					<form class="form-horizontal row-fluid">
 						<div class="control-group">
@@ -157,14 +161,32 @@
 								区域名称
 							</label>
 							<div class="controls">
-								<input type="text" ng-model="areaName" placeholder="请填写区域名称"
+								<div class="dropdown">
+									<input type="hidden" ng-model="selectId"/>
+									<a class="dropdown-toggle btn" href="javascript:;" ng-click="selectItem()">
+										{{selectName}}<i class="icon-caret-down"></i>
+									</a>
+									<ul class="dropdown-menu" ng-show="selectItemShow">
+										<li ng-repeat="item in selectitems">
+											<a href="javascript:;" ng-click="selectedItem(item.id,item.name)">{{item.name}}</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="basicinput">
+								学校名称
+							</label>
+							<div class="controls">
+								<input type="text" ng-model="itemName" placeholder="请填写学校名称"
 									class="span8 tip">
-								<input type="hidden" ng-model="areaId">
+								<input type="hidden" ng-model="itemId">
 							</div>
 						</div>
 						<div class="control-group">
 							<div class="controls">
-								<button class="btn" type="submit" ng-click="addAreaSub()">
+								<button class="btn" type="submit" ng-click="addItemSub()">
 									提交
 								</button>
 							</div>
@@ -186,90 +208,105 @@
 		<script src="<%=basePath%>js/angular1.4.8.min.js"
 			type="text/javascript"></script>
 		<script type="text/javascript">
-			//初始化区域信息
-			function initAreaData($http,$scope){
+			//初始化List信息
+			function initListData($http,$scope){
 			    $http({
 			        method : "GET",
 			        url : "<%=basePath%>myschool/getSchoolList.do"
 			    }).then(function mySucces(response) {
 			    	$scope.loadingShow = false;
-			        $scope.areas = response.data.datas;
+			        $scope.items = response.data.datas;
 			    }, function myError(response) {
 			    	$scope.loadingShow = false;
-			        alert("getAreaList.do访问错误出错!");
+			        alert("school->initListData.do访问错误出错!");
 			        console.log(response.statusText);
 			    });
 			}
 			var app = angular.module('myApp', []);
 			app.controller('myCtrl', function($scope,$http) {
+				//初始化区域信息
+			    $http({
+			        method : "GET",
+			        url : "<%=basePath%>school/getAreaList.do"
+			    }).then(function mySucces(response) {
+			        $scope.selectitems = response.data.datas;
+			        $scope.selectId = response.data.datas[0].id;
+			        $scope.selectName = response.data.datas[0].name;
+			    }, function myError(response) {
+			    	$scope.loadingShow = false;
+			        alert("school->getAreaList.do访问错误出错!");
+			        console.log(response.statusText);
+			    });
+			    //隐藏加载框
 				$scope.loadingShow = true;
+				//是否显示下拉框
+				$scope.selectItemShow = false;
 				//区域信息
-			    $scope.areaShow = true;
-			    $scope.areaAddShow = false;
-			    $scope.areaError = false;
-			    $scope.areaName = '';
-			    //学校信息
-			    $scope.schoolShow = false;
-			    //街道信息
-			    $scope.streetShow = false;
+			    $scope.listShow = true;
+			    $scope.addShow = false;
+			    $scope.addError = false;
+			    $scope.itemName = '';
 			    //初始化区域信息
-			    initAreaData($http,$scope);
+			    initListData($http,$scope);
 			    //添加区域信息
-			    $scope.addArea = function() {
-			        $scope.areaAddShow = true;
-				    $scope.areaShow = false;
-				    $scope.areaId="";
+			    $scope.addItem = function() {
+			        $scope.addShow = true;
+				    $scope.listShow = false;
+				    $scope.itemId="";
 			    };
 			    //添加区域提交
-			    $scope.addAreaSub = function() {
-			        if($scope.areaName == ''){
-			        	$scope.areaError = true;
+			    $scope.addItemSub = function() {
+			        if($scope.itemName == ''){
+			        	$scope.addError = true;
 			        }else{
-			        	$scope.areaError = false;
+			        	$scope.addError = false;
 			        	$scope.loadingShow = true;
-			        	var areaName = $scope.areaName;
-			        	areaName = encodeURI(areaName);
-			         	if($scope.areaId==""){
+			        	var itemName = $scope.itemName;
+			        	itemName = encodeURI(itemName);
+			        	var selectId = $scope.selectId;
+			         	if($scope.itemId==""){
 			         		//增加区域信息
 						    $http({
 						        method : "POST",
-						        url : "<%=basePath%>school/addArea.do",
+						        url : "<%=basePath%>myschool/addItem.do",
 						        params: {
-									name:areaName
+									name:itemName,
+									aid:selectId
 								}
 						    }).then(function mySucces(response) {
 						        if(response.data.code==0){
-						            $scope.areaName = '';
+						            $scope.itemName = '';
 						            //初始化区域信息
-				    				initAreaData($http,$scope);
-								    $scope.areaAddShow = false;
-					    			$scope.areaShow = true;
+				    				initListData($http,$scope);
+								    $scope.addShow = false;
+					    			$scope.listShow = true;
 						        	alert('添加成功!');
 						        }else{
 						        	$scope.loadingShow = false;
 						        	alert('添加失败!');
 						        }
 						    }, function myError(response) {
-						        alert("addAreaSub.do访问错误出错!");
+						        alert("addItemSub.do访问错误出错!");
 						        console.log(response.statusText);
 						    });
 			         	}else{
-			         		var id = $scope.areaId;
+			         		var id = $scope.itemId;
 			         		//修改区域信息
 						    $http({
 						        method : "POST",
-						        url : "<%=basePath%>school/updArea.do",
+						        url : "<%=basePath%>myschool/updItem.do",
 						        params: {
-									name:areaName,
-									id:id
+									name:itemName,
+									id:id,
+									aid:selectId
 								}
 						    }).then(function mySucces(response) {
 						        if(response.data.code==0){
-						            $scope.areaName = '';
-						            //初始化区域信息
-				    				initAreaData($http,$scope);
-								    $scope.areaAddShow = false;
-					    			$scope.areaShow = true;
+						            $scope.itemName = '';
+						            //初始化信息
+				    				initListData($http,$scope);
+								    $scope.addShow = false;
+					    			$scope.listShow = true;
 						        	alert('修改成功!');
 						        }else{
 						        	$scope.loadingShow = false;
@@ -283,37 +320,49 @@
 			        }
 			    };
 			    //删除区域信息
-			    $scope.delArea = function(id) {
+			    $scope.delItem = function(id) {
 			    	if (window.confirm("是否删除选中项?")) {
 			    		$scope.loadingShow = true;
 						$http({
 					        method : "POST",
-					        url : "<%=basePath%>school/delArea.do",
+					        url : "<%=basePath%>myschool/delItem.do",
 					        params: {
 								id:id
 							}
 					    }).then(function mySucces(response) {
 					        if(response.data.code==0){
-					            $scope.areaName = '';
-					            //初始化区域信息
-				    			initAreaData($http,$scope);
+					            $scope.itemName = '';
+					            //初始化信息
+				    			initListData($http,$scope);
 					        	alert('删除成功!');
 					        }else{
 					        	$scope.loadingShow = false;
 					        	alert('删除失败!');
 					        }
 					    }, function myError(response) {
-					        alert("delArea.do访问错误出错!");
+					        alert("delItem.do访问错误出错!");
 					        console.log(response.statusText);
 					    });
 					}
 			    };
 			    //显示修改区域信息
-			    $scope.showUpdArea = function(id,name) {
-			    	$scope.areaAddShow = true;
-				    $scope.areaShow = false;
-				    $scope.areaId = id;
-				    $scope.areaName = name;
+			    $scope.showUpdItem = function(id,name,aid,aName) {
+			    	$scope.addShow = true;
+				    $scope.listShow = false;
+				    $scope.itemId = id;
+				    $scope.itemName = name;
+				    $scope.selectId = aid;
+			        $scope.selectName = aName;
+			    };
+			    //显示下拉框
+			    $scope.selectItem = function() {
+			    	$scope.selectItemShow = !$scope.selectItemShow;
+			    };
+			    //选择
+			    $scope.selectedItem = function(id,name) {
+			    	$scope.selectItemShow = false;
+			    	$scope.selectId = id;
+			    	$scope.selectName = name;
 			    };
 			});
 		</script>

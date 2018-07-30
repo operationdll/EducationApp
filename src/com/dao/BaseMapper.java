@@ -23,4 +23,11 @@ public interface BaseMapper {
 
 	// 学校信息
 	List<SchoolDto> selectSchools();
+
+	int insertSchool(SchoolDto SchoolDto);
+
+	int deleteSchool(int id);
+
+	int updateSchool(SchoolDto SchoolDto);
+	
 }

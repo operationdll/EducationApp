@@ -9,15 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import com.alibaba.fastjson.JSON;
 import com.dao.BaseMapper;
-import com.dto.AreaDto;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dto.SchoolDto;
 
 @Controller
 @RequestMapping(value = "/myschool")
@@ -36,9 +36,9 @@ public class SchoolControl {
 	public String init() {
 		return "school";
 	}
-	
+
 	/**
-	 * 获取学校信息
+	 * 获取信息
 	 * 
 	 * @param req
 	 * @param response
@@ -58,24 +58,27 @@ public class SchoolControl {
 			out.flush();
 			out.close();
 		} catch (Exception e) {
-			log.error("getAreaList报错:" + e);
+			log.error("SchoolControl->getAreaList报错:" + e);
 		}
 	}
 
 	/**
-	 * 增加区域信息
+	 * 增加信息
 	 * 
 	 * @param req
 	 * @param response
 	 * @param name
 	 */
-	@RequestMapping(value = "/addArea.do", method = { RequestMethod.POST })
-	public void addArea(HttpServletRequest req, HttpServletResponse response,
-			String name) {
+	@RequestMapping(value = "/addItem.do", method = { RequestMethod.POST })
+	public void addItem(HttpServletRequest req, HttpServletResponse response,
+			String name, int aid) {
 		response.setContentType("application/json");
 		PrintWriter out = null;
 		try {
-			int num = baseMapper.insertArea(URLDecoder.decode(name, "UTF-8"));
+			SchoolDto SchoolDto = new SchoolDto();
+			SchoolDto.setAid(aid);
+			SchoolDto.setName(URLDecoder.decode(name, "UTF-8"));
+			int num = baseMapper.insertSchool(SchoolDto);
 			out = response.getWriter();
 			if (num > 0) {
 				out.print(JSON.parse("{code:0}"));
@@ -83,7 +86,7 @@ public class SchoolControl {
 				out.print(JSON.parse("{code:1}"));
 			}
 		} catch (Exception e) {
-			log.error("addArea报错:" + e.toString());
+			log.error("SchoolControl->addItem报错:" + e.toString());
 		} finally {
 			if (out != null) {
 				out.flush();
@@ -93,19 +96,19 @@ public class SchoolControl {
 	}
 
 	/**
-	 * 删除区域信息
+	 * 删除信息
 	 * 
 	 * @param req
 	 * @param response
 	 * @param name
 	 */
-	@RequestMapping(value = "/delArea.do", method = { RequestMethod.POST })
-	public void delArea(HttpServletRequest req, HttpServletResponse response,
+	@RequestMapping(value = "/delItem.do", method = { RequestMethod.POST })
+	public void delItem(HttpServletRequest req, HttpServletResponse response,
 			int id) {
 		response.setContentType("application/json");
 		PrintWriter out = null;
 		try {
-			int num = baseMapper.deleteArea(id);
+			int num = baseMapper.deleteSchool(id);
 			out = response.getWriter();
 			if (num > 0) {
 				out.print(JSON.parse("{code:0}"));
@@ -113,7 +116,7 @@ public class SchoolControl {
 				out.print(JSON.parse("{code:1}"));
 			}
 		} catch (Exception e) {
-			log.error("delArea报错:" + e.toString());
+			log.error("SchoolControl->delItem报错:" + e.toString());
 		} finally {
 			if (out != null) {
 				out.flush();
@@ -123,22 +126,23 @@ public class SchoolControl {
 	}
 
 	/**
-	 * 修改区域信息
+	 * 修改信息
 	 * 
 	 * @param req
 	 * @param response
 	 * @param name
 	 */
-	@RequestMapping(value = "/updArea.do", method = { RequestMethod.POST })
-	public void updArea(HttpServletRequest req, HttpServletResponse response,
-			int id, String name) {
+	@RequestMapping(value = "/updItem.do", method = { RequestMethod.POST })
+	public void updItem(HttpServletRequest req, HttpServletResponse response,
+			int id, String name,int aid) {
 		response.setContentType("application/json");
 		PrintWriter out = null;
 		try {
-			AreaDto areaDto = new AreaDto();
-			areaDto.setId(id);
-			areaDto.setName(URLDecoder.decode(name, "UTF-8"));
-			int num = baseMapper.updateArea(areaDto);
+			SchoolDto SchoolDto = new SchoolDto();
+			SchoolDto.setId(id);
+			SchoolDto.setAid(aid);
+			SchoolDto.setName(URLDecoder.decode(name, "UTF-8"));
+			int num = baseMapper.updateSchool(SchoolDto);
 			out = response.getWriter();
 			if (num > 0) {
 				out.print(JSON.parse("{code:0}"));
@@ -146,7 +150,7 @@ public class SchoolControl {
 				out.print(JSON.parse("{code:1}"));
 			}
 		} catch (Exception e) {
-			log.error("updArea报错:" + e.toString());
+			log.error("SchoolControl->updItem报错:" + e.toString());
 		} finally {
 			if (out != null) {
 				out.flush();

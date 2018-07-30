@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `schools` (
    `name` VARCHAR(50) NOT NULL,
    aid int not null,
    FOREIGN KEY (aid) REFERENCES areas(ID)
-);
+)character set = utf8;
 
 DROP TABLE IF EXISTS `streets`;
 
@@ -23,4 +23,4 @@ CREATE TABLE IF NOT EXISTS `streets` (
    `name` VARCHAR(50) NOT NULL,
    sid int not null,
    FOREIGN KEY (sid) REFERENCES schools(ID)
-);
+)character set = utf8;

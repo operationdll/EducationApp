@@ -134,7 +134,7 @@
 			</div>
 		</div>
 		<!-- area add -->
-		<div class="content" ng-show="areaAddShow" id="infoDiv">
+		<div class="content" ng-show="areaAddShow">
 			<div class="module">
 				<div class="module-head">
 					<h3>
