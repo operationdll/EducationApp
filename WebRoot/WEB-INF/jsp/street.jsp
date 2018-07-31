@@ -98,7 +98,26 @@
 					<div class="module-body table">
 						<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper"
 							role="grid">
-							<div id="DataTables_Table_0_length" class="dataTables_length">
+							<div class="dataTables_length">
+								<label>
+									区域:
+									<select size="1" name="DataTables_Table_0_length"
+										style="width:auto;" ng-options="v.id as v.name for v in selectitems" ng-change="areaChange()" ng-model="searchP1">
+										<option value="">
+											--请选择--
+										</option>
+									</select>
+									学校:
+									<select size="1" name="DataTables_Table_0_length"
+										style="width:auto;" ng-options="v.id as v.name for v in schoolOptions" ng-model="searchP2">
+										<option value="">
+											--请选择--
+										</option>
+									</select>
+								</label>
+								</br>
+								街道:<input type="input" style="width:180px" ng-model="searchP3"/><a class="btn btn-success" ng-click="search()">搜索</a>
+								</br></br>
 								<a class="btn btn-success" ng-click="addItem()">添加</a>
 							</div>
 							<table class="table table-striped table-bordered table-condensed">
@@ -459,6 +478,66 @@
 			    //显示学校下拉框
 			    $scope.selectSchoolItem = function() {
 			    	$scope.selectSchoolItemShow = !$scope.selectSchoolItemShow;
+			    };
+			    //搜索区域变化
+			    $scope.schoolOptions = [];
+			    $scope.areaChange = function() {
+			    	var searchP1 = "";
+			    	if($scope.searchP1!=undefined&&$scope.searchP1!=""){
+			    		searchP1 = $scope.searchP1;
+			    	}
+			    	if(searchP1==""){
+			    	
+			    	}else{
+			    		$scope.loadingShow = true;
+						$http({
+					        method : "GET",
+					        url : "<%=basePath%>street/getSchools.do",
+					        params: {
+								aid:searchP1
+							}
+					    }).then(function mySucces(response) {
+					    	$scope.loadingShow = false;
+					        $scope.schoolOptions = response.data.datas;
+					    }, function myError(response) {
+					    	$scope.loadingShow = false;
+					        alert("Street->getSchools.do访问错误出错!");
+					        console.log(response.statusText);
+					    });
+			    	};
+			    };
+			    //搜索方法
+			    $scope.search = function() {
+			    	var searchP1 = 0;
+			    	if($scope.searchP1!=undefined&&$scope.searchP1!=""){
+			    		searchP1 = $scope.searchP1;
+			    	}
+			    	var searchP2 = 0;
+			    	if($scope.searchP2!=undefined&&$scope.searchP2!=""){
+			    		searchP2 = $scope.searchP2;
+			    	}
+			    	var searchP3 = "";
+			    	if($scope.searchP3!=undefined&&$scope.searchP3!=""){
+			    		searchP3 = $scope.searchP3;
+			    		searchP3 = encodeURI(searchP3);
+			    	}
+			    	$scope.loadingShow = true;
+					$http({
+				        method : "GET",
+				        url : "<%=basePath%>street/search.do",
+				        params: {
+							aid:searchP1,
+							sid:searchP2,
+							name:searchP3
+						}
+				    }).then(function mySucces(response) {
+				    	$scope.loadingShow = false;
+				        $scope.items = response.data.datas;
+				    }, function myError(response) {
+				    	$scope.loadingShow = false;
+				        alert("Street->getSchools.do访问错误出错!");
+				        console.log(response.statusText);
+				    });
 			    };
 			});
 		</script>

@@ -163,11 +163,11 @@ public class StreetlControl {
 		response.setContentType("application/json");
 		PrintWriter out = null;
 		try {
-			StreetDto schoolDto = new StreetDto();
-			schoolDto.setId(id);
-			schoolDto.setSid(sid);
-			schoolDto.setName(URLDecoder.decode(name, "UTF-8"));
-			int num = baseMapper.updateStreet(schoolDto);
+			StreetDto streetDto = new StreetDto();
+			streetDto.setId(id);
+			streetDto.setSid(sid);
+			streetDto.setName(URLDecoder.decode(name, "UTF-8"));
+			int num = baseMapper.updateStreet(streetDto);
 			out = response.getWriter();
 			if (num > 0) {
 				out.print(JSON.parse("{code:0}"));
@@ -176,6 +176,44 @@ public class StreetlControl {
 			}
 		} catch (Exception e) {
 			log.error("SchoolControl->updItem报错:" + e.toString());
+		} finally {
+			if (out != null) {
+				out.flush();
+				out.close();
+			}
+		}
+	}
+
+	/**
+	 * 搜索信息
+	 * 
+	 * @param req
+	 * @param response
+	 * @param model
+	 */
+	@RequestMapping(value = "/search.do", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public void search(HttpServletRequest req, HttpServletResponse response,
+			int aid, int sid, String name) {
+		response.setContentType("application/json");
+		PrintWriter out = null;
+		try {
+			StreetDto streetDto = new StreetDto();
+			if (aid != 0) {
+				streetDto.setAid(aid);
+			}
+			if (sid != 0) {
+				streetDto.setSid(sid);
+			}
+			if (!"".equals(name)) {
+				streetDto.setName(URLDecoder.decode(name, "UTF-8"));
+			}
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("datas", baseMapper.searchStreets(streetDto));
+			out = response.getWriter();
+			out.print(JSON.toJSONString(map));
+		} catch (Exception e) {
+			log.error("SchoolControl->search报错:" + e.toString());
 		} finally {
 			if (out != null) {
 				out.flush();
