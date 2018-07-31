@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.dto.AreaDto;
 import com.dto.SchoolDto;
+import com.dto.StreetDto;
 
 /**
  * 数据库查询BaseMapper
@@ -29,5 +30,16 @@ public interface BaseMapper {
 	int deleteSchool(int id);
 
 	int updateSchool(SchoolDto SchoolDto);
-	
+
+	// 街道信息
+	List<StreetDto> selectStreets();
+
+	int deleteStreet(int id);
+
+	List<SchoolDto> getSchools(int aid);
+
+	int insertStreet(StreetDto streetDto);
+
+	int updateStreet(StreetDto streetDto);
+
 }

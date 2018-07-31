@@ -138,7 +138,7 @@
 			<div class="module">
 				<div class="module-head">
 					<h3>
-						添加区域
+						区域
 					</h3>
 				</div>
 				<div class="module-body">

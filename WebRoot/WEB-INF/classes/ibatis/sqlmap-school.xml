@@ -3,6 +3,8 @@
 <mapper namespace="com.dao.BaseMapper">
 	<resultMap id="BaseResultMap" type="com.dto.AreaDto"></resultMap>
 	<resultMap id="SchoolMap" type="com.dto.SchoolDto"></resultMap>
+	<resultMap id="StreetMap" type="com.dto.StreetDto"></resultMap>
+
 	<!-- 区域信息 -->
 	<select id="selectAreas" resultMap="BaseResultMap">
 		select id,name from areas
@@ -21,19 +23,47 @@
 	</update>
 	<!-- 学校信息 -->
 	<select id="selectSchools" resultMap="SchoolMap">
-		select t2.id,t2.name,t1.id aid,t1.name aName from areas t1 right join schools t2
-		on t1.id = t2.aid
+		select t2.id,t2.name,t1.id aid,t1.name aName from areas t1 right
+		join schools t2 on t1.id = t2.aid
 	</select>
-	
+
 	<insert id="insertSchool" parameterType="com.dto.SchoolDto">
 		INSERT INTO schools(name,aid) VALUES(#{name},#{aid})
 	</insert>
-	
+
 	<delete id="deleteSchool" parameterType="int">
 		delete from schools where id = #{id}
 	</delete>
-	
+
 	<update id="updateSchool" parameterType="com.dto.SchoolDto">
-		update schools set name = #{name}, aid =#{aid}  where id = #{id}
+		update schools set name = #{name}, aid =#{aid} where id = #{id}
+	</update>
+	<!-- 街道信息 -->
+	<select id="selectStreets" resultMap="StreetMap">
+		select 
+			t1.id aid, 
+			t1.name aName, 
+			t2.id sid, 
+			t2.name sName,
+			t3.id, 
+			t3.name 
+		from areas t1 right join schools t2 on t1.id =
+		t2.aid right join streets t3 on t3.sid = t2.id
+	</select>
+	
+	<delete id="deleteStreet" parameterType="int">
+		delete from streets where id = #{id}
+	</delete>
+	
+	<select id="getSchools" resultMap="SchoolMap">
+		select t2.id,t2.name from schools t2 where t2.aid = #{aid}
+	</select>
+	
+	<insert id="insertStreet" parameterType="com.dto.StreetDto">
+		INSERT INTO streets(name,sid) VALUES(#{name},#{sid})
+	</insert>
+	
+	<update id="updateStreet" parameterType="com.dto.StreetDto">
+		update streets set name = #{name}, sid =#{sid} where id = #{id}
 	</update>
 </mapper>

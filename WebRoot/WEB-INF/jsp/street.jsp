@@ -92,7 +92,7 @@
 				<div class="module">
 					<div class="module-head">
 						<h3>
-							学校信息
+							街道信息
 						</h3>
 					</div>
 					<div class="module-body table">
@@ -114,6 +114,9 @@
 											学校名称
 										</th>
 										<th>
+											街道
+										</th>
+										<th>
 											操作
 										</th>
 									</tr>
@@ -127,11 +130,14 @@
 											{{ item.aName }}
 										</td>
 										<td>
+											{{ item.sName }}
+										</td>
+										<td>
 											{{ item.name }}
 										</td>
 										<td>
 											<a class="btn btn-primary"
-												ng-click="showUpdItem(item.id,item.name,item.aid,item.aName)">修改</a>
+												ng-click="showUpdItem(item.id,item.name,item.aid,item.aName,item.sid,item.sName)">修改</a>
 											<a class="btn btn-danger" ng-click="delItem(item.id)">删除</a>
 										</td>
 									</tr>
@@ -148,12 +154,12 @@
 			<div class="module">
 				<div class="module-head">
 					<h3>
-						学校
+						街道
 					</h3>
 				</div>
 				<div class="module-body">
 					<div class="alert alert-error" ng-show="addError">
-						<strong>错误:</strong> 请填写学校名称
+						<strong>错误:</strong> {{errms}}
 					</div>
 					<form class="form-horizontal row-fluid">
 						<div class="control-group">
@@ -176,10 +182,28 @@
 						</div>
 						<div class="control-group">
 							<label class="control-label" for="basicinput">
-								学校名称
+								学校
 							</label>
 							<div class="controls">
-								<input type="text" ng-model="itemName" placeholder="请填写学校名称"
+								<div class="dropdown">
+									<input type="hidden" ng-model="selectSchoolId"/>
+									<a class="dropdown-toggle btn" href="javascript:;" ng-click="selectSchoolItem()">
+										{{selectSchoolName}}<i class="icon-caret-down"></i>
+									</a>
+									<ul class="dropdown-menu" ng-show="selectSchoolItemShow">
+										<li ng-repeat="item in schoolItems">
+											<a href="javascript:;" ng-click="selectedSchoolItem(item.id,item.name)">{{item.name}}</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="basicinput">
+								街道名称
+							</label>
+							<div class="controls">
+								<input type="text" ng-model="itemName" placeholder="请填写街道名称"
 									class="span8 tip">
 								<input type="hidden" ng-model="itemId">
 							</div>
@@ -212,16 +236,43 @@
 			function initListData($http,$scope){
 			    $http({
 			        method : "GET",
-			        url : "<%=basePath%>myschool/getSchoolList.do"
+			        url : "<%=basePath%>street/getStreetList.do"
 			    }).then(function mySucces(response) {
 			    	$scope.loadingShow = false;
 			        $scope.items = response.data.datas;
 			    }, function myError(response) {
 			    	$scope.loadingShow = false;
-			        alert("school->initListData.do访问错误出错!");
+			        alert("Street->initListData.do访问错误出错!");
 			        console.log(response.statusText);
 			    });
 			}
+			
+			//学校下拉框变化
+			function schoolOptions($http,$scope){
+				$scope.loadingShow = true;
+				var aid = $scope.selectId;
+				$http({
+			        method : "GET",
+			        url : "<%=basePath%>street/getSchools.do",
+			        params: {
+						aid:aid
+					}
+			    }).then(function mySucces(response) {
+			    	$scope.loadingShow = false;
+			        $scope.schoolItems = response.data.datas;
+			        $scope.selectSchoolId = 0;
+			        $scope.selectSchoolName = '';
+			        if(response.data.datas!=null&&response.data.datas.length>0){
+			        	$scope.selectSchoolId = response.data.datas[0].id;
+			        	$scope.selectSchoolName = response.data.datas[0].name;
+			        }
+			    }, function myError(response) {
+			    	$scope.loadingShow = false;
+			        alert("Street->getSchools.do访问错误出错!");
+			        console.log(response.statusText);
+			    });
+			}
+			
 			var app = angular.module('myApp', []);
 			app.controller('myCtrl', function($scope,$http) {
 				//初始化区域信息
@@ -232,15 +283,21 @@
 			        $scope.selectitems = response.data.datas;
 			        $scope.selectId = response.data.datas[0].id;
 			        $scope.selectName = response.data.datas[0].name;
+			        //学校信息
+			        schoolOptions($http,$scope);
 			    }, function myError(response) {
 			    	$scope.loadingShow = false;
-			        alert("school->getAreaList.do访问错误出错!");
+			        alert("Street->getAreaList.do访问错误出错!");
 			        console.log(response.statusText);
 			    });
 			    //隐藏加载框
 				$scope.loadingShow = true;
 				//是否显示下拉框
 				$scope.selectItemShow = false;
+				//是否显示学校下拉框
+				$scope.selectSchoolItemShow = false;
+				$scope.selectSchoolId = 0;
+				$scope.selectSchoolName = '';
 				//区域信息
 			    $scope.listShow = true;
 			    $scope.addShow = false;
@@ -256,22 +313,26 @@
 			    };
 			    //添加区域提交
 			    $scope.addItemSub = function() {
-			        if($scope.itemName == ''){
+			        if($scope.selectSchoolId==0){
+			        	$scope.errms = '请填选择学校';
+			        	$scope.addError = true;
+			        }else if($scope.itemName == ''){
+			        	$scope.errms = '请填写街道名称';
 			        	$scope.addError = true;
 			        }else{
 			        	$scope.addError = false;
 			        	$scope.loadingShow = true;
 			        	var itemName = $scope.itemName;
 			        	itemName = encodeURI(itemName);
-			        	var selectId = $scope.selectId;
+			        	var sid = $scope.selectSchoolId;
 			         	if($scope.itemId==""){
 			         		//增加区域信息
 						    $http({
 						        method : "POST",
-						        url : "<%=basePath%>myschool/addItem.do",
+						        url : "<%=basePath%>street/addItem.do",
 						        params: {
 									name:itemName,
-									aid:selectId
+									sid:sid
 								}
 						    }).then(function mySucces(response) {
 						        if(response.data.code==0){
@@ -286,7 +347,7 @@
 						        	alert('添加失败!');
 						        }
 						    }, function myError(response) {
-						        alert("addItemSub.do访问错误出错!");
+						        alert("Street->addItemSub.do访问错误出错!");
 						        console.log(response.statusText);
 						    });
 			         	}else{
@@ -294,11 +355,11 @@
 			         		//修改区域信息
 						    $http({
 						        method : "POST",
-						        url : "<%=basePath%>myschool/updItem.do",
+						        url : "<%=basePath%>street/updItem.do",
 						        params: {
 									name:itemName,
 									id:id,
-									aid:selectId
+									sid:sid
 								}
 						    }).then(function mySucces(response) {
 						        if(response.data.code==0){
@@ -313,7 +374,7 @@
 						        	alert('修改失败!');
 						        }
 						    }, function myError(response) {
-						        alert("updArea.do访问错误出错!");
+						        alert("Street->updItem.do访问错误出错!");
 						        console.log(response.statusText);
 						    });
 			         	}
@@ -325,7 +386,7 @@
 			    		$scope.loadingShow = true;
 						$http({
 					        method : "POST",
-					        url : "<%=basePath%>myschool/delItem.do",
+					        url : "<%=basePath%>street/delItem.do",
 					        params: {
 								id:id
 							}
@@ -340,29 +401,64 @@
 					        	alert('删除失败!');
 					        }
 					    }, function myError(response) {
-					        alert("delItem.do访问错误出错!");
+					        alert("Street->delItem.do访问错误出错!");
 					        console.log(response.statusText);
 					    });
 					}
 			    };
 			    //显示修改区域信息
-			    $scope.showUpdItem = function(id,name,aid,aName) {
-			    	$scope.addShow = true;
-				    $scope.listShow = false;
-				    $scope.itemId = id;
-				    $scope.itemName = name;
-				    $scope.selectId = aid;
-			        $scope.selectName = aName;
+			    $scope.showUpdItem = function(id,name,aid,aName,sid,sname) {
+				    $scope.loadingShow = true;
+					var aid = $scope.selectId;
+					$http({
+				        method : "GET",
+				        url : "<%=basePath%>street/getSchools.do",
+				        params: {
+							aid:aid
+						}
+				    }).then(function mySucces(response) {
+				    	$scope.loadingShow = false;
+				        $scope.schoolItems = response.data.datas;
+				        $scope.selectSchoolId = 0;
+				        $scope.selectSchoolName = '';
+				        if(response.data.datas!=null&&response.data.datas.length>0){
+				        	$scope.selectSchoolId = sid;
+				        	$scope.selectSchoolName = sname;
+				        }
+				        $scope.addShow = true;
+					    $scope.listShow = false;
+					    $scope.itemId = id;
+					    $scope.itemName = name;
+					    $scope.selectId = aid;
+				        $scope.selectName = aName;
+				    }, function myError(response) {
+				    	$scope.loadingShow = false;
+				        alert("Street->getSchools.do访问错误出错!");
+				        console.log(response.statusText);
+				    });
 			    };
 			    //显示下拉框
 			    $scope.selectItem = function() {
 			    	$scope.selectItemShow = !$scope.selectItemShow;
+			    	$scope.selectSchoolItemShow = false;
 			    };
 			    //选择
 			    $scope.selectedItem = function(id,name) {
 			    	$scope.selectItemShow = false;
 			    	$scope.selectId = id;
 			    	$scope.selectName = name;
+			    	//学校信息
+			        schoolOptions($http,$scope);
+			    };
+			    //学校下拉选择
+			    $scope.selectedSchoolItem = function(id,name) {
+			    	$scope.selectSchoolItemShow = false;
+			    	$scope.selectSchoolId = id;
+			    	$scope.selectSchoolName = name;
+			    };
+			    //显示学校下拉框
+			    $scope.selectSchoolItem = function() {
+			    	$scope.selectSchoolItemShow = !$scope.selectSchoolItemShow;
 			    };
 			});
 		</script>
