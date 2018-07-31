@@ -222,8 +222,7 @@
 								街道名称
 							</label>
 							<div class="controls">
-								<input type="text" ng-model="itemName" placeholder="请填写街道名称"
-									class="span8 tip">
+								<textarea class="span8" rows="5" ng-model="itemName" placeholder="请填写街道名称"></textarea>
 								<input type="hidden" ng-model="itemId">
 							</div>
 						</div>

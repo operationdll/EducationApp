@@ -100,12 +100,19 @@ public class StreetlControl {
 		response.setContentType("application/json");
 		PrintWriter out = null;
 		try {
-			StreetDto streetDto = new StreetDto();
-			streetDto.setSid(sid);
-			streetDto.setName(URLDecoder.decode(name, "UTF-8"));
-			int num = baseMapper.insertStreet(streetDto);
+			boolean isSuccess = true;
+			String[] streets = URLDecoder.decode(name, "UTF-8").split(",");
+			for (String s : streets) {
+				StreetDto streetDto = new StreetDto();
+				streetDto.setSid(sid);
+				streetDto.setName(s);
+				int num = baseMapper.insertStreet(streetDto);
+				if (num < 1) {
+					isSuccess = false;
+				}
+			}
 			out = response.getWriter();
-			if (num > 0) {
+			if (isSuccess) {
 				out.print(JSON.parse("{code:0}"));
 			} else {
 				out.print(JSON.parse("{code:1}"));
