@@ -37,6 +37,14 @@
 		.wrapper {
 			background-color: white;
 		}
+		
+		@media (max-width: 979px) {
+		  .span3{display:none;}
+		}
+		
+		@media (min-width: 980px) {
+		  .span3{display:block;}
+		}
 		</style>
 	</head>
 
@@ -44,8 +52,7 @@
 		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container">
-					<a class="btn btn-navbar" data-toggle="collapse"
-						data-target=".navbar-inverse-collapse"> <i
+					<a class="btn btn-navbar"> <i
 						class="icon-reorder shaded"></i> </a>
 					<a class="brand" ng-click="bgPage()">教育系统后台</a>
 				</div>
@@ -117,6 +124,18 @@
 			        $("#contentFrame").attr("src","<%=basePath%>street/init.do");
 			    };
 			});
+			
+			$(".btn-navbar").click(function(){
+				$(".span3").toggle(1000);
+			});
+			
+			window.onresize = function(obj){
+				if($(window).width()>979){
+					$(".span3").show();
+				}else{
+					$(".span3").hide();
+				}
+			}
 		</script>
 	</body>
 </html>
