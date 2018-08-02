@@ -109,19 +109,35 @@
 			type="text/javascript"></script>
 		<script src="<%=basePath%>js/jquery-3.1.1.min.js"></script>
 		<script type="text/javascript">
+			//点击后隐藏菜单
+			function hideMemu(){
+				if($(window).width()<=979){
+					$( ".span3" ).animate({
+			          height: "0px",
+			          overflow: "hidden"
+			        }, 1000 ,function(){
+			        	$(".span3").hide();
+			        });
+				}
+			}
+			
 			var app = angular.module('myApp', []);
 			app.controller('myCtrl', function($scope,$http) {
 				$scope.bgPage = function() {
 			        $("#contentFrame").attr("src","/EducationApp/html/bg.html");
+			        hideMemu();
 			    };
 			    $scope.magArea = function() {
 			        $("#contentFrame").attr("src","<%=basePath%>school/areaPage.do");
+			        hideMemu();
 			    };
 			    $scope.magSchool = function() {
 			        $("#contentFrame").attr("src","<%=basePath%>myschool/init.do");
+			        hideMemu();
 			    };
 			    $scope.magStreet = function() {
 			        $("#contentFrame").attr("src","<%=basePath%>street/init.do");
+			        hideMemu();
 			    };
 			});
 			
