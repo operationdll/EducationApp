@@ -126,14 +126,40 @@
 			});
 			
 			$(".btn-navbar").click(function(){
-				$(".span3").toggle(1000);
+				var isShow = $(".span3").is(":visible");
+				if(isShow){
+					$( ".span3" ).animate({
+			          height: "0px",
+			          overflow: "hidden"
+			        }, 1000 ,function(){
+			        	$(".span3").hide();
+			        });
+				}else{
+					$(".span3").show();
+					$( ".span3" ).animate({
+			          height: "222px",
+			          overflow: "hidden"
+			        }, 1000);
+				}
 			});
 			
 			window.onresize = function(obj){
 				if($(window).width()>979){
 					$(".span3").show();
+					$(".span3").css({overflow: "hidden",height:"222px"});
 				}else{
 					$(".span3").hide();
+					$(".span3").css({overflow: "hidden",height:"0px"});
+				}
+			}
+			
+			window.onload = function(obj){
+				if($(window).width()>979){
+					$(".span3").show();
+					$(".span3").css({overflow: "hidden",height:"222px"});
+				}else{
+					$(".span3").hide();
+					$(".span3").css({overflow: "hidden",height:"0px"});
 				}
 			}
 		</script>
