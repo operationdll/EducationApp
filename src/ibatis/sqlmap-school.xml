@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dao.BaseMapper">
-	<resultMap id="BaseResultMap" type="com.dto.AreaDto"></resultMap>
+	<resultMap id="AreaMap" type="com.dto.AreaDto"></resultMap>
 	<resultMap id="SchoolMap" type="com.dto.SchoolDto"></resultMap>
 	<resultMap id="StreetMap" type="com.dto.StreetDto"></resultMap>
 
 	<!-- 区域信息 -->
-	<select id="selectAreas" resultMap="BaseResultMap">
+	<select id="selectAreas" resultMap="AreaMap">
 		select id,name from areas
 	</select>
 

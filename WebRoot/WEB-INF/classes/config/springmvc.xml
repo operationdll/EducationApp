@@ -33,16 +33,20 @@
 			</beans:list>
 		</beans:property>
 	</beans:bean>
+
 	<!-- 启动注解 -->
 	<annotation-driven />
+
 	<!-- 配置自动扫描的包 -->
 	<context:component-scan base-package="com"></context:component-scan>
+
 	<!-- 配置视图解析器 如何把handler 方法返回值解析为实际的物理视图 -->
 	<beans:bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/jsp/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
+
 	<!-- 读取配置文件 -->
 	<beans:bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -54,6 +58,7 @@
 			</beans:list>
 		</beans:property>
 	</beans:bean>
+
 	<!-- 配置数据源 -->
 	<beans:bean id="dataSource"
 		class="org.apache.commons.dbcp.BasicDataSource"
@@ -63,7 +68,12 @@
 		<beans:property name="url" value="${jdbc.url}" />
 		<beans:property name="username" value="${jdbc.username}" />
 		<beans:property name="password" value="${jdbc.password}" />
+		<beans:property name="maxActive" value="30" />
+		<beans:property name="maxIdle" value="5" />
+		<beans:property name="validationQuery" value="SELECT 1" />
+		<beans:property name="testOnBorrow" value="true" />
 	</beans:bean>
+
 	<!-- mybatis -->
 	<beans:bean id="sqlSessionFactory"
 		class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -71,10 +81,10 @@
 			value="classpath:ibatis/sqlmap-config.xml" />
 		<beans:property name="dataSource" ref="dataSource" />
 	</beans:bean>
+
 	<!-- 配置mybatis扫描器 -->
 	<beans:bean
 		class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<!-- 扫描me.gacl.dao这个包以及它的子包下的所有映射接口类 -->
 		<beans:property name="basePackage" value="com.dao" />
 		<beans:property name="sqlSessionFactoryBeanName"
 			value="sqlSessionFactory" />
