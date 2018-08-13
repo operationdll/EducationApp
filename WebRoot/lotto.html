@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<title>My Lotto</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<style type="text/css">
+.w3-container {
+	padding: 0px;
+}
+
+.w3-third {
+	width: 100%;
+	float: left;
+}
+</style>
+	</head>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+function sortNumber(a,b){
+	return a - b
+}
+$(function(){
+    $("#bnt1").click(function(){
+		$("#d1").html("");
+	    let arr = new Array();
+	    for(let j=0;j<4;j++){
+			 let m = new Map();
+			 let arr1 = new Array();
+			for(let i=0;i<6;i++){
+				let num = Math.floor(Math.random() * 40) + 1; 
+				if(!m.has(num)){
+					m.set(num,num);
+					arr1.push(Number(num));
+				}else{
+					i--;
+				}
+			}
+			arr.push(arr1.sort(sortNumber));
+		}
+		let $html=''; 
+	    for(let i=0;i<arr.length;i++){
+		    let num = Math.floor(Math.random() * 10) + 1; 
+			let str = arr[i].join(' | ');
+			$html=$html+`
+			<div class="w3-third" >
+				<p>`+str+' | '+num+`</p>
+			</div>
+			`;
+		}
+		$("#d1").append($html);
+	});
+});
+</script>
+	<body>
+		<p>
+			My Lotto
+		</p>
+		<div class="w3-container" id="d1">
+		</div>
+		<button id="bnt1">
+			恭喜中奖
+		</button>
+
+
+	</body>
+</html>

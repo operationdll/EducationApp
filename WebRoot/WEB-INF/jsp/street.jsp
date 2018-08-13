@@ -84,7 +84,12 @@
 		.dropdown-menu{
 			display:block;
 		}
-	</style>
+
+		.searchDiv {
+			display: block;
+			float: left;
+		}
+</style>
 	</head>
 	<body ng-app="myApp" ng-controller="myCtrl">
 		<div class="content" ng-show="listShow">
@@ -100,25 +105,37 @@
 							role="grid">
 							<div class="dataTables_length">
 								<label>
-									区域:
-									<select size="1" name="DataTables_Table_0_length"
-										style="width:auto;" ng-options="v.id as v.name for v in selectitems" ng-change="areaChange()" ng-model="searchP1">
-										<option value="">
-											--请选择--
-										</option>
-									</select>
-									学校:
-									<select size="1" name="DataTables_Table_0_length"
-										style="width:auto;" ng-options="v.id as v.name for v in schoolOptions" ng-model="searchP2">
-										<option value="">
-											--请选择--
-										</option>
-									</select>
+									<div class="searchDiv">
+										区域:
+										<select size="1" name="DataTables_Table_0_length"
+											style="width: auto;"
+											ng-options="v.id as v.name for v in selectitems"
+											ng-change="areaChange()" ng-model="searchP1">
+											<option value="">
+												--请选择--
+											</option>
+										</select>
+									</div>
+									<div class="searchDiv">
+										学校:
+										<select size="1" name="DataTables_Table_0_length"
+											style="width: auto;"
+											ng-options="v.id as v.name for v in schoolOptions"
+											ng-model="searchP2">
+											<option value="">
+												--请选择--
+											</option>
+										</select>
+									</div>
+									<div class="searchDiv">
+										街道:
+										<input type="input" style="width: 180px" ng-model="searchP3" />
+										<a class="btn btn-success" ng-click="search()">搜索</a>
+									</div>
 								</label>
-								</br>
-								街道:<input type="input" style="width:180px" ng-model="searchP3"/><a class="btn btn-success" ng-click="search()">搜索</a>
-								</br></br>
-								<a class="btn btn-success" ng-click="addItem()">添加</a>
+							</div>
+							<div style="width: 100%;">
+								<a class="btn btn-success" style="margin-left: 30px;" ng-click="addItem()">添加</a>
 							</div>
 							<table class="table table-striped table-bordered table-condensed">
 								<thead>
@@ -187,13 +204,14 @@
 							</label>
 							<div class="controls">
 								<div class="dropdown">
-									<input type="hidden" ng-model="selectId"/>
-									<a class="dropdown-toggle btn" href="javascript:;" ng-click="selectItem()">
-										{{selectName}}<i class="icon-caret-down"></i>
-									</a>
+									<input type="hidden" ng-model="selectId" />
+									<a class="dropdown-toggle btn" href="javascript:;"
+										ng-click="selectItem()"> {{selectName}}<i
+										class="icon-caret-down"></i> </a>
 									<ul class="dropdown-menu" ng-show="selectItemShow">
 										<li ng-repeat="item in selectitems">
-											<a href="javascript:;" ng-click="selectedItem(item.id,item.name)">{{item.name}}</a>
+											<a href="javascript:;"
+												ng-click="selectedItem(item.id,item.name)">{{item.name}}</a>
 										</li>
 									</ul>
 								</div>
@@ -205,13 +223,14 @@
 							</label>
 							<div class="controls">
 								<div class="dropdown">
-									<input type="hidden" ng-model="selectSchoolId"/>
-									<a class="dropdown-toggle btn" href="javascript:;" ng-click="selectSchoolItem()">
-										{{selectSchoolName}}<i class="icon-caret-down"></i>
-									</a>
+									<input type="hidden" ng-model="selectSchoolId" />
+									<a class="dropdown-toggle btn" href="javascript:;"
+										ng-click="selectSchoolItem()"> {{selectSchoolName}}<i
+										class="icon-caret-down"></i> </a>
 									<ul class="dropdown-menu" ng-show="selectSchoolItemShow">
 										<li ng-repeat="item in schoolItems">
-											<a href="javascript:;" ng-click="selectedSchoolItem(item.id,item.name)">{{item.name}}</a>
+											<a href="javascript:;"
+												ng-click="selectedSchoolItem(item.id,item.name)">{{item.name}}</a>
 										</li>
 									</ul>
 								</div>
@@ -222,7 +241,8 @@
 								街道名称
 							</label>
 							<div class="controls">
-								<textarea class="span8" rows="5" ng-model="itemName" placeholder="请填写街道名称"></textarea>
+								<textarea class="span8" rows="5" ng-model="itemName"
+									placeholder="请填写街道名称"></textarea>
 								<input type="hidden" ng-model="itemId">
 							</div>
 						</div>
