@@ -43,4 +43,6 @@ public interface BaseMapper {
 	int updateStreet(StreetDto streetDto);
 
 	List<StreetDto> searchStreets(StreetDto streetDto);
+	
+	List<StreetDto> getStreets(StreetDto streetDto);
 }

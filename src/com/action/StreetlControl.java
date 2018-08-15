@@ -228,6 +228,41 @@ public class StreetlControl {
 			}
 		}
 	}
+	
+	/**
+	 * 根据区域和学校获取街道信息
+	 * 
+	 * @param req
+	 * @param response
+	 * @param model
+	 */
+	@RequestMapping(value = "/searchStreets.do", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	public void searchStreets(HttpServletRequest req, HttpServletResponse response,
+			int aid, String name) {
+		response.setContentType("application/json");
+		PrintWriter out = null;
+		try {
+			StreetDto streetDto = new StreetDto();
+			if (aid != 0) {
+				streetDto.setAid(aid);
+			}
+			if (!"".equals(name)) {
+				streetDto.setName(name);
+			}
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("datas", baseMapper.getStreets(streetDto));
+			out = response.getWriter();
+			out.print(JSON.toJSONString(map));
+		} catch (Exception e) {
+			log.error("SchoolControl->searchStreets报错:" + e.toString());
+		} finally {
+			if (out != null) {
+				out.flush();
+				out.close();
+			}
+		}
+	}
 
 	public BaseMapper getBaseMapper() {
 		return baseMapper;

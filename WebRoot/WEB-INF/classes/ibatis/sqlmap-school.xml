@@ -73,6 +73,19 @@
         </if>  
 	</select>
 	
+	<select id="getStreets" resultMap="StreetMap" parameterType="com.dto.StreetDto">
+		select t3.name 
+		from areas t1 right join schools t2 on t1.id =
+		t2.aid right join streets t3 on t3.sid = t2.id
+		where 1=1
+		<if test='aid != 0'>  
+           and t2.aid=#{aid,jdbcType=INTEGER}  
+        </if>
+        <if test='name != null'>  
+           and t2.name like concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>  
+	</select>
+	
 	<delete id="deleteStreet" parameterType="int">
 		delete from streets where id = #{id,jdbcType=INTEGER}
 	</delete>
