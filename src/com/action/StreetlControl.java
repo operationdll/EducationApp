@@ -248,7 +248,7 @@ public class StreetlControl {
 				streetDto.setAid(aid);
 			}
 			if (!"".equals(name)) {
-				streetDto.setName(name);
+				streetDto.setName(new String(name.getBytes("iso-8859-1"), "utf-8"));
 			}
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("datas", baseMapper.getStreets(streetDto));

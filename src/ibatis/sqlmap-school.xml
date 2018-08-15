@@ -74,7 +74,12 @@
 	</select>
 	
 	<select id="getStreets" resultMap="StreetMap" parameterType="com.dto.StreetDto">
-		select t3.name 
+		select t1.id aid, 
+			t1.name aName, 
+			t2.id sid, 
+			t2.name sName,
+			t3.id, 
+			t3.name 
 		from areas t1 right join schools t2 on t1.id =
 		t2.aid right join streets t3 on t3.sid = t2.id
 		where 1=1
