@@ -239,7 +239,7 @@ public class StreetlControl {
 	@RequestMapping(value = "/searchStreets.do", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	public void searchStreets(HttpServletRequest req, HttpServletResponse response,
-			int aid, String name) {
+			int aid, int sid, String name) {
 		response.setContentType("application/json");
 		PrintWriter out = null;
 		try {
@@ -247,15 +247,18 @@ public class StreetlControl {
 			if (aid != 0) {
 				streetDto.setAid(aid);
 			}
+			if (sid != 0) {
+				streetDto.setSid(sid);
+			}
 			if (!"".equals(name)) {
 				streetDto.setName(new String(name.getBytes("iso-8859-1"), "utf-8"));
 			}
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("datas", baseMapper.getStreets(streetDto));
+			map.put("datas", baseMapper.searchStreets(streetDto));
 			out = response.getWriter();
 			out.print(JSON.toJSONString(map));
 		} catch (Exception e) {
-			log.error("SchoolControl->searchStreets报错:" + e.toString());
+			log.error("SchoolControl->search报错:" + e.toString());
 		} finally {
 			if (out != null) {
 				out.flush();
