@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.BaseMapper">
+	<resultMap id="AreaMap" type="com.dto.AreaDto"></resultMap>
+	<resultMap id="SchoolMap" type="com.dto.SchoolDto"></resultMap>
+	<resultMap id="StreetMap" type="com.dto.StreetDto"></resultMap>
+
+	<!-- 区域信息 -->
+	<select id="selectAreas" resultMap="AreaMap">
+		select id,name from areas
+	</select>
+
+	<insert id="insertArea" parameterType="java.lang.String">
+		INSERT INTO areas(name) VALUES(#{name,jdbcType=VARCHAR})
+	</insert>
+
+	<delete id="deleteArea" parameterType="int">
+		delete from areas where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<update id="updateArea" parameterType="com.dto.AreaDto">
+		update areas set name = #{name,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 学校信息 -->
+	<select id="selectSchools" resultMap="SchoolMap">
+		select t2.id,t2.name,t1.id aid,t1.name aName from areas t1 right
+		join schools t2 on t1.id = t2.aid
+	</select>
+
+	<insert id="insertSchool" parameterType="com.dto.SchoolDto">
+		INSERT INTO schools(name,aid) VALUES(#{name,jdbcType=VARCHAR},#{aid,jdbcType=INTEGER})
+	</insert>
+
+	<delete id="deleteSchool" parameterType="int">
+		delete from schools where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<update id="updateSchool" parameterType="com.dto.SchoolDto">
+		update schools set name = #{name,jdbcType=VARCHAR}, aid =#{aid,jdbcType=INTEGER} where id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 街道信息 -->
+	<select id="selectStreets" resultMap="StreetMap">
+		select 
+			t1.id aid, 
+			t1.name aName, 
+			t2.id sid, 
+			t2.name sName,
+			t3.id, 
+			t3.name 
+		from areas t1 right join schools t2 on t1.id =
+		t2.aid right join streets t3 on t3.sid = t2.id
+	</select>
+	
+	<select id="searchStreets" resultMap="StreetMap" parameterType="com.dto.StreetDto">
+		select 
+			t1.id aid, 
+			t1.name aName, 
+			t2.id sid, 
+			t2.name sName,
+			t3.id, 
+			t3.name 
+		from areas t1 right join schools t2 on t1.id =
+		t2.aid right join streets t3 on t3.sid = t2.id
+		where 1=1
+		<if test='aid != 0'>  
+           and t2.aid=#{aid,jdbcType=INTEGER}  
+        </if>
+		<if test='sid != 0'>  
+           and t3.sid=#{sid,jdbcType=INTEGER}  
+        </if>
+        <if test='name != null'>  
+           and t3.name like concat('%',#{name,jdbcType=VARCHAR},'%')
+        </if>  
+	</select>
+	
+	<delete id="deleteStreet" parameterType="int">
+		delete from streets where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<select id="getSchools" resultMap="SchoolMap">
+		select t2.id,t2.name from schools t2 where t2.aid = #{aid,jdbcType=INTEGER}
+	</select>
+	
+	<insert id="insertStreet" parameterType="com.dto.StreetDto">
+		INSERT INTO streets(name,sid) VALUES(#{name,jdbcType=VARCHAR},#{sid,jdbcType=INTEGER})
+	</insert>
+	
+	<update id="updateStreet" parameterType="com.dto.StreetDto">
+		update streets set name = #{name,jdbcType=VARCHAR}, sid =#{sid,jdbcType=INTEGER} where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

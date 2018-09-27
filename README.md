@@ -1,2 +1,2 @@
-# EducationJava
-EducationJava  Test
+# Education Application
+Spring boot application
