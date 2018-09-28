@@ -208,7 +208,7 @@
 									<a class="dropdown-toggle btn" href="javascript:;"
 										ng-click="selectItem()"> {{selectName}}<i
 										class="icon-caret-down"></i> </a>
-									<ul class="dropdown-menu" ng-show="selectItemShow">
+									<ul class="dropdown-menu" style="height:200px;overflow-y: scroll;" ng-show="selectItemShow">
 										<li ng-repeat="item in selectitems">
 											<a href="javascript:;"
 												ng-click="selectedItem(item.id,item.name)">{{item.name}}</a>
@@ -227,7 +227,7 @@
 									<a class="dropdown-toggle btn" href="javascript:;"
 										ng-click="selectSchoolItem()"> {{selectSchoolName}}<i
 										class="icon-caret-down"></i> </a>
-									<ul class="dropdown-menu" ng-show="selectSchoolItemShow">
+									<ul class="dropdown-menu" style="height:200px;overflow-y: scroll;" ng-show="selectSchoolItemShow">
 										<li ng-repeat="item in schoolItems">
 											<a href="javascript:;"
 												ng-click="selectedSchoolItem(item.id,item.name)">{{item.name}}</a>

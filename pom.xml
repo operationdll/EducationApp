@@ -12,6 +12,12 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<dependencies>
+		<!-- 开发热部署 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
 		<!-- spring mvc依赖 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -148,6 +154,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- 指定入启动口类 -->
+				<configuration>
+					<mainClass>com.spring.config.MySpringBootApplication</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

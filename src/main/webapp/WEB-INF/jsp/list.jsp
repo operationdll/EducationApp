@@ -90,7 +90,7 @@
 					</div>
 					<!--/.span3-->
 					<div class="span9">
-						<iframe src="/html/bg.html" id="contentFrame"
+						<iframe src="<%=basePath%>html/bg.html" id="contentFrame"
 							style="width: 100%; height: 60%; border: 0px;"></iframe>
 					</div>
 					<!--/.span9-->
@@ -124,7 +124,7 @@
 			var app = angular.module('myApp', []);
 			app.controller('myCtrl', function($scope,$http) {
 				$scope.bgPage = function() {
-			        $("#contentFrame").attr("src","/EducationApp/html/bg.html");
+			        $("#contentFrame").attr("src","<%=basePath%>html/bg.html");
 			        hideMemu();
 			    };
 			    $scope.magArea = function() {
