@@ -37,7 +37,7 @@ public class HelloWorld {
 			RequestMethod.POST })
 	public void login(HttpServletRequest req, HttpServletResponse response,
 			Model model, String userName, String password) {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			String code = "{code:0}";
@@ -86,7 +86,7 @@ public class HelloWorld {
 			HttpServletResponse response, Model model) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("datas", baseMapper.selectAreas());
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			out = response.getWriter();
@@ -108,7 +108,7 @@ public class HelloWorld {
 	@RequestMapping(value = "/addArea.do", method = { RequestMethod.POST })
 	public void addArea(HttpServletRequest req, HttpServletResponse response,
 			String name) {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			int num = baseMapper.insertArea(URLDecoder.decode(name, "UTF-8"));
@@ -138,7 +138,7 @@ public class HelloWorld {
 	@RequestMapping(value = "/delArea.do", method = { RequestMethod.POST })
 	public void delArea(HttpServletRequest req, HttpServletResponse response,
 			int id) {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			int num = baseMapper.deleteArea(id);
@@ -168,7 +168,7 @@ public class HelloWorld {
 	@RequestMapping(value = "/updArea.do", method = { RequestMethod.POST })
 	public void updArea(HttpServletRequest req, HttpServletResponse response,
 			int id, String name) {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			AreaDto areaDto = new AreaDto();

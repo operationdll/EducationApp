@@ -50,7 +50,7 @@ public class StreetlControl {
 			HttpServletResponse response, Model model) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("datas", baseMapper.selectStreets());
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			out = response.getWriter();
@@ -75,7 +75,7 @@ public class StreetlControl {
 			HttpServletResponse response, int aid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("datas", baseMapper.getSchools(aid));
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			out = response.getWriter();
@@ -97,7 +97,7 @@ public class StreetlControl {
 	@RequestMapping(value = "/addItem.do", method = { RequestMethod.POST })
 	public void addItem(HttpServletRequest req, HttpServletResponse response,
 			String name, int sid) {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			boolean isSuccess = true;
@@ -137,7 +137,7 @@ public class StreetlControl {
 	@RequestMapping(value = "/delItem.do", method = { RequestMethod.POST })
 	public void delItem(HttpServletRequest req, HttpServletResponse response,
 			int id) {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			int num = baseMapper.deleteStreet(id);
@@ -167,7 +167,7 @@ public class StreetlControl {
 	@RequestMapping(value = "/updItem.do", method = { RequestMethod.POST })
 	public void updItem(HttpServletRequest req, HttpServletResponse response,
 			int id, String name, int sid) {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			StreetDto streetDto = new StreetDto();
@@ -202,7 +202,7 @@ public class StreetlControl {
 			RequestMethod.POST })
 	public void search(HttpServletRequest req, HttpServletResponse response,
 			int aid, int sid, String name) {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			StreetDto streetDto = new StreetDto();
@@ -240,7 +240,7 @@ public class StreetlControl {
 			RequestMethod.POST })
 	public void searchStreets(HttpServletRequest req, HttpServletResponse response,
 			int aid, int sid, String name) {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			StreetDto streetDto = new StreetDto();

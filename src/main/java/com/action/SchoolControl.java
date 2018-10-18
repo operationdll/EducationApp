@@ -50,7 +50,7 @@ public class SchoolControl {
 			HttpServletResponse response, Model model) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("datas", baseMapper.selectSchools());
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			out = response.getWriter();
@@ -72,7 +72,7 @@ public class SchoolControl {
 	@RequestMapping(value = "/addItem.do", method = { RequestMethod.POST })
 	public void addItem(HttpServletRequest req, HttpServletResponse response,
 			String name, int aid) {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			SchoolDto SchoolDto = new SchoolDto();
@@ -105,7 +105,7 @@ public class SchoolControl {
 	@RequestMapping(value = "/delItem.do", method = { RequestMethod.POST })
 	public void delItem(HttpServletRequest req, HttpServletResponse response,
 			int id) {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			int num = baseMapper.deleteSchool(id);
@@ -135,7 +135,7 @@ public class SchoolControl {
 	@RequestMapping(value = "/updItem.do", method = { RequestMethod.POST })
 	public void updItem(HttpServletRequest req, HttpServletResponse response,
 			int id, String name,int aid) {
-		response.setContentType("application/json");
+		response.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = null;
 		try {
 			SchoolDto SchoolDto = new SchoolDto();
